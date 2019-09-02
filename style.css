@@ -1,0 +1,241 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+  
+
+html {
+  font-size: 62.5%; 
+  height: 95%;
+  /* background-color: #292929; */
+}
+  
+
+body {
+  box-sizing: border-box;
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  min-height: 100%;
+  position: relative;
+}
+
+
+body::after {
+    content: '';
+    display: block;
+    height: 50px;
+}
+
+header {
+    
+    text-align: center;
+    padding-top: 8rem;
+    padding-bottom: 2rem;
+}
+ 
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    font: bold 10rem 'Playfair Display', serif;
+    letter-spacing: 2px;
+    display: none;
+    color: #292929;
+    margin-bottom: 3rem;
+    margin-top: 5rem;
+}
+
+h3 {
+    font-size: 4.4rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 3rem;
+    color: #292929;
+}
+
+.buttons {
+
+    text-align: center;
+    position: relative;
+    float:none;
+    padding: 4rem;
+    
+}
+
+.button {
+    display: inline-block;
+    color: #fff;
+    background-color: #292929;
+    font-size: 1.3rem;
+    font-weight: 300;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: .8rem 1.5rem;
+    border: none;
+    border-radius: 3rem;
+    width: 20rem;
+    height: 4rem;
+    margin-bottom: 1rem;
+    -webkit-appearance: none;
+    
+
+}
+
+.button:not(:last-child){
+    margin-right: 3.5rem;
+}
+
+
+
+.button:hover {
+    background-color: #B3C562;
+    color: #fff;
+}
+
+ .movies h2 {
+    color: #fff;
+    font-size: 3.5rem;
+    font-weight: 200;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 2px;
+    background-image: linear-gradient(to right bottom,rgba(26, 188, 156,0.8),rgba(52, 73, 94,0.8));
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone; 
+    width: 70%;
+}
+
+
+
+
+.movies {
+    padding: 1rem;
+    color: #292929;
+    display: inline-block;
+    width: 55rem;
+    height: 30rem;
+    margin: 2rem;
+    border-radius: 2px;
+    background-color: #fff;
+    transition: all .2s;
+    position: relative;
+
+}
+
+ul {
+    list-style: none;
+    display: inline-block;
+    text-align: left;
+    position: absolute;
+    top: 0%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+}
+
+ul li {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 3px;
+   text-transform: uppercase;
+   filter: brightness(200%);
+}
+
+footer {
+    text-align: center;
+    padding: 5rem;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 14rem;
+}
+    
+  
+    footer p {
+      padding: 7rem;
+      color: rgb(104, 103, 103);
+      font-weight: 100;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      font-weight: 300; 
+    }
+
+    .card {
+        perspective: 150rem;
+        -moz-perspective: 150rem;
+        position: relative;
+        width: 55rem;
+        height: 30rem; 
+    }
+
+        .card__side {
+          height: 30rem;
+          transition: all 1s ease;
+          border-radius: 3px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          backface-visibility: hidden;
+          overflow: hidden;
+          box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15); 
+        }
+        
+          .card__side--back {
+            transform: rotateY(180deg); 
+        }
+        .card:hover .card__side--front {
+          transform: rotateY(-180deg); 
+        }
+        .card:hover .card__side--back {
+          transform: rotateY(0); 
+        }
+
+        .card__cta {
+          position: absolute;
+          top: 42%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          margin: 0 auto;
+          width: 90%;
+          text-align: center; 
+        }
+
+        .btn,
+        .btn:link,
+        .btn:visited {
+            text-decoration: none;
+            padding: .8rem 3rem;
+            text-transform: uppercase;
+            display: inline-block;
+            border-radius: 10rem;
+            transition: all .2s;
+            position: absolute;
+            font-size: 1.6rem;
+            font-weight: 300;
+            background-color: #ff7675;
+            color: #fff;
+            top: 82%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all .2s;
+        }
+
+        .btn:hover {
+            filter: brightness(90%);
+        }
+
+

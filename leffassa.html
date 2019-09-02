@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>mitä leffassa?</title>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,200,300,400" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+   
+</head>
+
+<!--    Alasvetovalikkoa varten luotu funktio "dropDown" ajetaan heti kun sivulatautuu jotta käyttäjä voi nähdä listan eri elokuvateattereista-->
+
+<body onload="dropDown()">
+
+    <header>
+        <h1 id="main">mitä tänään leffassa?</h1>
+        <h3>klikkaa, tsekkaa ja mee leffaan.</h3>
+    </header>
+
+
+    <div class="buttons">
+
+        <button id="button" class="button">Kaikki elokuvat</button>
+
+        <select name="dropDown" class="dropDown button" id="dropDown" onchange="loadDoc2()">
+            <option value=""></option>
+        </select>
+    </div>
+    <br>
+    <section class="api">
+    <div class="container">
+        <div id="myDiv"></div>
+    </div>
+</section>
+    <footer>
+            <p>Aleksi Taivalantti &copy; 2019</p>
+        </footer>
+
+    <script>
+        //Sivun header laskeutuu alas kun sivu ladataan. ajaksi on asetettu 900 millisekuntia
+
+        $(document).ready(function() {
+            $("#main").slideDown(700);
+        });
+
+        //Luodaan event listener jQueryn $(get) toiminnolla. Klikkaamalla saadaan ladattua tiedot finnkinon rajapinnasta kaikista tämän hetkisistä leffoista. 
+
+        $("#button").click(function() {
+            loadDoc();
+        });
+
+        //funktiolla loadDoc saa esiin tiedot kaikista tällä hetkellä finnkinon leffateattereissa pyörivistä leffoista
+
+        function loadDoc() {
+
+            //Luodaan XMLHttpRequest olio ajax pyyntöä varten
+
+            var xhttp = new XMLHttpRequest();
+
+            //Määritetään mistä osoitteesta tieto pyydetään
+
+            xhttp.open("GET", "http://www.finnkino.fi/xml/Schedule/", true);
+            xhttp.send();
+
+            //Mikäli tieto vastaanotetaan, se tallennetaan muuttujaan
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // Tallennetaan finnkinon palvelimelta saatu dokumentti xmlDoc- nimiseen muuttujaan
+                    var xmlDoc = xhttp.responseXML;
+                    console.log(xmlDoc);
+
+                    // halutut tiedot parsitaan xmlDoc muuttujasta x, y, z, t ja a muuttujiin
+
+
+                    var x = $(xmlDoc).find("Title");
+
+                    var y = $(xmlDoc).find("ProductionYear");
+
+                    var z = $(xmlDoc).find("EventSmallImagePortrait");
+
+                    var w = $(xmlDoc).find("EventLargeImageLandscape");
+
+                    var t = $(xmlDoc).find("TheatreAndAuditorium");
+
+                    var a = $(xmlDoc).find("dttmShowStart");
+
+
+                    var e = $(xmlDoc).find("ShowURL");
+
+
+                    // Luodaan muuttuja output, johon konkatenoidaan valitut tiedot for- silmukan avulla. tiedot asetetaan heti html ul- listaelementtiin joka sijoitetaan div- elementin sisään
+
+                    var output = "";
+                    
+                    for (var i = 0; i < x.length; i++) {
+
+                        output +=
+                        '<div class="card movies">'+
+                          '<div class="card__side card__side--front" style="background-image: url(&#39;'+w[i].innerHTML+'&#39;);">'+
+                              '<h2>'+ x[i].innerHTML +'</h2>'+
+                             '</div>'+
+                          '<div class="card__side card__side--back" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(&#39;'+w[i].innerHTML+'&#39;);">'+
+                              '<div class="card__cta">'+
+                                 '<ul><li>Elokuva: <b>' + x[i].innerHTML + '</b></li>' +
+                            '<li>Valmistusvuosi: ' + y[i].innerHTML + '</li>' +
+                            '<li>' + t[i].innerHTML + '</li>' +
+                            '<li>' + a[i].innerHTML + '</li>' +
+                            '</ul>' +
+                                '</div>'+
+                                '<a class="btn" href="' + e[i].innerHTML + '" target="_blank">Osta lippu</a>'+
+                              '</div></div>';
+  
+                    }
+
+                    // output muuttuja tuodaan esille "myDiv"- elementtiin
+
+                    $("#myDiv").html(output);
+                    
+                    
+
+
+                }
+            }
+
+        }
+
+        //funktio joka etsii tiedot halutusta leffateatterista. funktio tehty ilman jQuerya
+
+        function loadDoc2() {
+
+            // x- muuttujaan asetetaan arvo sivun alasvetovalikosta
+
+            var x = document.getElementById("dropDown").value;
+            console.log(x);
+
+            var xhttp = new XMLHttpRequest();
+
+            //Sijoitetaan alasvetovalikosta saatu arvo rajapinnan osoitteeseen että saadaan halutut tiedot spesifistä elokuvateatterista
+
+            xhttp.open("GET", "https://www.finnkino.fi/xml/Schedule/?area=" + x, true);
+            xhttp.send();
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+
+                    var xmlDoc = xhttp.responseXML;
+
+                    console.log(xmlDoc);
+
+
+                    x = xmlDoc.getElementsByTagName("Title");
+                    y = xmlDoc.getElementsByTagName("ProductionYear");
+                    z = xmlDoc.getElementsByTagName("EventSmallImagePortrait");
+                    w = xmlDoc.getElementsByTagName("EventLargeImageLandscape");
+
+                    t = xmlDoc.getElementsByTagName("TheatreAndAuditorium");
+
+                    a = xmlDoc.getElementsByTagName("dttmShowStart");
+
+                    r = xmlDoc.getElementsByTagName("ImageURL");
+
+                    e = xmlDoc.getElementsByTagName("ShowURL");
+
+                    var output = "";
+
+                    for (var i = 0; i < x.length; i++) {
+
+                        output +=
+                        '<div class="card movies">'+
+                          '<div class="card__side card__side--front" style="background-image: url(&#39;'+w[i].innerHTML+'&#39;);">'+
+                              '<h2>'+ x[i].innerHTML +'</h2>'+
+                             '</div>'+
+                          '<div class="card__side card__side--back" style="background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(&#39;'+w[i].innerHTML+'&#39;);">'+
+                              '<div class="card__cta">'+
+                                 '<ul><li>Elokuva: <b>' + x[i].innerHTML + '</b></li>' +
+                            '<li>Valmistusvuosi: ' + y[i].innerHTML + '</li>' +
+                            '<li>' + t[i].innerHTML + '</li>' +
+                            '<li>' + a[i].innerHTML + '</li>' +
+                            '</ul>' +
+                                '</div>'+
+                                '<a class="btn" href="' + e[i].innerHTML + '" target="_blank">Osta lippu</a>'+
+                              '</div></div>';
+                    }
+                    document.getElementById("myDiv").innerHTML = output;
+                }
+            }
+        }
+
+        //funktio alasvetovalikkoa varten. funktiolla haetaan finnkinon rajapinnasta elokuvateattereiden id:t. tämän funktion ansiosta uudet teatterit päivittyvät alasvetovalikkoon automaattisesti ja vanhat poistetaan
+
+        function dropDown() {
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("GET", "https://www.finnkino.fi/xml/TheatreAreas/", true);
+            xhttp.send();
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+
+                    var xmlDoc = xhttp.responseXML;
+                    console.log(xmlDoc);
+
+                    //xmlDoc muuttujasta parsitaan elokuvateattereiden nimet sekä niiden id:t.
+
+                    x = xmlDoc.getElementsByTagName("ID");
+                    y = xmlDoc.getElementsByTagName("Name");
+
+
+                    var output = "";
+
+                    // nimet ja id:t lisätään html select- elementtiin
+
+                    for (var i = 0; i < x.length; i++) {
+                        output +=
+                            '<div class="drop-content"><option value="' + x[i].innerHTML + '">' + y[i].innerHTML + '</option></div>';
+                    }
+                    document.getElementById("dropDown").innerHTML = output;
+
+                }
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
